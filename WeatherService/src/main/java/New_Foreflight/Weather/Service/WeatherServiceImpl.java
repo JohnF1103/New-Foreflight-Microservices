@@ -5,14 +5,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WeatherServiceImpl implements Weatherservice {
-    @Override
-    public String getGreeting() {
-        return "hello world";
-    }
 
     @Override
     public AirportInfoResponse getAirportInfo(String iaco) {
 
-        return null;
+
+        return new AirportInfoResponse(ParseAirportInfo(iaco),"vfr");
+    }
+
+    @Override
+    public String ParseAirportInfo(String info) {
+
+
+        return "blahnlah";
     }
 }

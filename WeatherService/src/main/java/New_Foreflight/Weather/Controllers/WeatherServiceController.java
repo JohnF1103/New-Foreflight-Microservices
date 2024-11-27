@@ -17,17 +17,10 @@ public class WeatherServiceController {
     @Autowired
     Weatherservice weatherservice;
 
-
-    @GetMapping("/getGreeting")
-    public String getHelloEndpoint(){
-
-        return weatherservice.getGreeting();
-    }
-
-        @GetMapping("/airport-info")
-        public ResponseEntity<AirportInfoResponse> getAirportInfo(@RequestParam String airportCode) {
+        @GetMapping(path = "/getAirportInfo/{iaco_code}")
+        public ResponseEntity<AirportInfoResponse> getAirportInfo(@RequestParam String iacoCode) {
             try {
-                AirportInfoResponse response = weatherservice.getAirportInfo(airportCode);
+                AirportInfoResponse response = weatherservice.getAirportInfo(iacoCode);
                 return ResponseEntity.ok(response);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
