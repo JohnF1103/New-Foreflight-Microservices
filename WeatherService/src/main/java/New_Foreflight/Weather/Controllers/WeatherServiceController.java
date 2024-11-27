@@ -17,10 +17,12 @@ public class WeatherServiceController {
     @Autowired
     Weatherservice weatherservice;
 
-        @GetMapping(path = "/getAirportInfo/{iaco_code}")
-        public ResponseEntity<AirportInfoResponse> getAirportInfo(@RequestParam String iacoCode) {
+
+
+        @GetMapping(value = "/getAirportInfo")
+        public ResponseEntity<AirportInfoResponse> getAirportInfo(@RequestParam String airportCode) {
             try {
-                AirportInfoResponse response = weatherservice.getAirportInfo(iacoCode);
+                AirportInfoResponse response = weatherservice.getAirportInfo(airportCode);
                 return ResponseEntity.ok(response);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

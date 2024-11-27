@@ -1,5 +1,11 @@
 package New_Foreflight.Weather.DTO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+
 public class AirportInfoResponse {
     private String metarData;
     private String flightRules;

@@ -17,6 +17,6 @@ public class WeatherServiceImpl implements Weatherservice {
     public String ParseAirportInfo(String info) {
 
 
-        return "blahnlah";
+        return "getting for " + info;
     }
 }
