@@ -16,6 +16,7 @@ public class WeatherServiceImpl implements Weatherservice {
     @Override
     public String ParseAirportInfo(String info) {
 
+        info = "call";
 
         return "getting for " + info;
     }
