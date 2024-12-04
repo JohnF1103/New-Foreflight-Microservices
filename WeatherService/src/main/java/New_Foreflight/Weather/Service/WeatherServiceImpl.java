@@ -1,17 +1,11 @@
 package New_Foreflight.Weather.Service;
 
-import New_Foreflight.Weather.DTO.AirportInfoResponse;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import New_Foreflight.Weather.DTO.AirportWeatherResponse;
 
 @Service
 public class WeatherServiceImpl implements Weatherservice {
@@ -23,32 +17,32 @@ public class WeatherServiceImpl implements Weatherservice {
     private String apiKey;
 
     @Override
-    public AirportInfoResponse getAirportInfo(String icao) {
+    public AirportWeatherResponse getAirportWeather(String icao) {
 
         String endpoint = apiUrl.replace("{station}", icao) + "?x-api-key=" + apiKey;
         RestTemplate restTemplate = new RestTemplate();
-        String result = restTemplate.getForObject(endpoint, String.class);
+        String apiResponseJSON = restTemplate.getForObject(endpoint, String.class);
     
 
-        return new AirportInfoResponse(ParseAirportInfo(result), "vfr");
+        return new AirportWeatherResponse(ParseRawMETARText(apiResponseJSON), "vfr");
     }
 
     @Override
-    public String ParseAirportInfo(String info) {
+    public String ParseRawMETARText(String apiResponse) {
 
         
         
-        JSONObject json = new JSONObject(info);
+        JSONObject json = new JSONObject(apiResponse);
 
-        Object result = json.getJSONArray("data").getJSONObject(0);
+        Object result = json.getJSONArray("data").getJSONObject(0).get("raw_text");
 
-        System.out.println(result.toString());
-        return "getting for ";
+        System.out.println(result);
+        return result.toString();
         
     }
 
     @Override
-    public String GetReadableElements(Object info) {
+    public String GetReadableElements(JSONObject info) {
 
         /*TODO
          * 
@@ -70,6 +64,8 @@ public class WeatherServiceImpl implements Weatherservice {
          * 
          * MODIFY the function header to suppourt whichever data structure you choose to use. if you wish to represent the values as strings or lists thats up to you.
         */
+
+        
         
         return null;
         

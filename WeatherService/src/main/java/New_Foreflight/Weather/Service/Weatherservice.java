@@ -1,12 +1,14 @@
 package New_Foreflight.Weather.Service;
 
-import New_Foreflight.Weather.DTO.AirportInfoResponse;
+import org.json.JSONObject;
+
+import New_Foreflight.Weather.DTO.AirportWeatherResponse;
 
 public interface Weatherservice {
 
-     AirportInfoResponse getAirportInfo(String iaco);
-     String ParseAirportInfo(String info);
-
+     AirportWeatherResponse getAirportWeather(String iaco);
+     String ParseRawMETARText(String info);
+     String GetReadableElements(JSONObject info);
 }
 
 

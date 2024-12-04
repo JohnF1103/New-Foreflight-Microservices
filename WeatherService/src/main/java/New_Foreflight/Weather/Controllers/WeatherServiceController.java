@@ -1,7 +1,5 @@
 package New_Foreflight.Weather.Controllers;
 
-import New_Foreflight.Weather.DTO.AirportInfoResponse;
-import New_Foreflight.Weather.Service.Weatherservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import New_Foreflight.Weather.DTO.AirportWeatherResponse;
+import New_Foreflight.Weather.Service.Weatherservice;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -20,9 +21,9 @@ public class WeatherServiceController {
 
 
         @GetMapping(value = "/getAirportInfo")
-        public ResponseEntity<AirportInfoResponse> getAirportInfo(@RequestParam String airportCode) {
+        public ResponseEntity<AirportWeatherResponse> getAirportInfo(@RequestParam String airportCode) {
             try {
-                AirportInfoResponse response = weatherservice.getAirportInfo(airportCode);
+                AirportWeatherResponse response = weatherservice.getAirportWeather(airportCode);
                 return ResponseEntity.ok(response);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
