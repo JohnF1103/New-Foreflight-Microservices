@@ -40,10 +40,38 @@ public class WeatherServiceImpl implements Weatherservice {
         
         JSONObject json = new JSONObject(info);
 
-        Object result = json.getJSONArray("data").getJSONObject(0).get("raw_text");
+        Object result = json.getJSONArray("data").getJSONObject(0);
 
         System.out.println(result.toString());
         return "getting for ";
+        
+    }
+
+    @Override
+    public String GetReadableElements(Object info) {
+
+        /*TODO
+         * 
+         * This should return certian elements of the METAR in dictionary form.
+         * TIME of the report
+         * Wind speed & direction 
+         * Visibility
+         * Cloud info
+         * Tempature
+         * Dewpoint
+         * Altimiter setting *(in Hg)
+         * humidity 
+         * 
+         * Feel free to make a list of these keys hard coded. 
+         * 
+         * add their respective values to a new dictionary and return it. 
+         * 
+         * OR modify the input dictionary to contain only the keys required and return it. (more space efficient) 
+         * 
+         * MODIFY the function header to suppourt whichever data structure you choose to use. if you wish to represent the values as strings or lists thats up to you.
+        */
+        
+        return null;
         
     }
 }
