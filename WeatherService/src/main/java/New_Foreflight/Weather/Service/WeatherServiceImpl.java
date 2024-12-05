@@ -49,30 +49,49 @@ public class WeatherServiceImpl implements Weatherservice {
 
         LinkedHashMap<String, Object> METARcomponents = new LinkedHashMap<>();
 
-        String[] keyList = {
-                "observed", "wind", "visibility", "clouds", "temperature", "dewpoint", "barometer", "humidity"
-        };
-
-        for (String key : keyList) {
-
-            if (result.has("wind") && !result.isNull("wind")) {
-                String windString = parseWinds(result.getJSONObject("wind"));
-                METARcomponents.put("winds", windString);
-            }
-
-
-            if (key.equals("clouds") && result.has(key) && !result.isNull(key)) {
-                // Extract clouds data with a helper function
-                List<HashMap<String, String>> cloudsList = parseClouds(result.getJSONArray(key));
-                METARcomponents.put(key, cloudsList);
-            } else {
-                String value = result.optString(key, "Not Available");
-                METARcomponents.put(key, value);
-            }
-        }
+        // Handle each key individually
+        handleWind(result, METARcomponents);
+        handleVisibility(result, METARcomponents);
+        handleClouds(result, METARcomponents);
+        handleOtherKeys(result, METARcomponents);
 
         return METARcomponents;
     }
+
+    // Handle wind data
+    private void handleWind(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        if (result.has("wind") && !result.isNull("wind")) {
+            String windString = parseWinds(result.getJSONObject("wind"));
+            METARcomponents.put("winds", windString);
+        }
+    }
+
+    // Handle visibility data
+    private void handleVisibility(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        if (result.has("visibility") && !result.isNull("visibility")) {
+            String visString = ParseVisibility(result.getJSONObject("visibility"));
+            METARcomponents.put("visibility", visString);
+        }
+    }
+
+    // Handle clouds data
+    private void handleClouds(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        if (result.has("clouds") && !result.isNull("clouds")) {
+            List<HashMap<String, String>> cloudsList = parseClouds(result.getJSONArray("clouds"));
+            METARcomponents.put("clouds", cloudsList);
+        }
+    }
+
+    // Handle other keys in keyList
+    private void handleOtherKeys(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        String[] keyList = {"observed", "temperature", "dewpoint", "barometer", "humidity"};
+
+        for (String key : keyList) {
+            String value = result.optString(key, "Not Available");
+            METARcomponents.put(key, value);
+        }
+    }
+
 
     /**
      * Helper functions to parse the fields data.
@@ -86,11 +105,11 @@ public class WeatherServiceImpl implements Weatherservice {
             // Using LinkedHashMap to preserve the order of keys (code, then feet)
             LinkedHashMap<String, String> cloudMap = new LinkedHashMap<>();
 
-            String code = cloud.optString("code", "Unknown");
-            cloudMap.put("code", code); // Add code first
+            String skyCode = cloud.optString("code", "Unknown");
+            cloudMap.put("code", skyCode); // Add code first
 
             // Only add "feet" if code is not CLR
-            if (!"CLR".equalsIgnoreCase(code)) {
+            if (!"CLR".equalsIgnoreCase(skyCode)) {
                 String feet = cloud.optString("feet", "Unknown");
                 cloudMap.put("feet", feet); // Add feet second if code is not CLR
             }
@@ -120,6 +139,11 @@ public class WeatherServiceImpl implements Weatherservice {
         }
 
         return windString.toString();
+    }
+
+    private String ParseVisibility(JSONObject VisibilityData){
+
+        return VisibilityData.optString("miles") +" SM";
     }
 
 
