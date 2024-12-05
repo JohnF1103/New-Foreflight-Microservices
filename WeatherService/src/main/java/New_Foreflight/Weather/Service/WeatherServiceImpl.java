@@ -47,13 +47,20 @@ public class WeatherServiceImpl implements Weatherservice {
         JSONObject json = new JSONObject(info);
         JSONObject result = json.getJSONArray("data").getJSONObject(0);
 
-        HashMap<String, Object> METARcomponents = new HashMap<>();
+        LinkedHashMap<String, Object> METARcomponents = new LinkedHashMap<>();
 
         String[] keyList = {
                 "observed", "wind", "visibility", "clouds", "temperature", "dewpoint", "barometer", "humidity"
         };
 
         for (String key : keyList) {
+
+            if (result.has("wind") && !result.isNull("wind")) {
+                String windString = parseWinds(result.getJSONObject("wind"));
+                METARcomponents.put("winds", windString);
+            }
+
+
             if (key.equals("clouds") && result.has(key) && !result.isNull(key)) {
                 // Extract clouds data with a helper function
                 List<HashMap<String, String>> cloudsList = parseClouds(result.getJSONArray(key));
@@ -92,6 +99,27 @@ public class WeatherServiceImpl implements Weatherservice {
         }
 
         return cloudsList;
+    }
+    private String parseWinds(JSONObject windData) {
+        // Extracting the necessary values from the JSON
+        int direction = windData.optInt("degrees", 0);  // Default to 0 if not available
+        int speedKts = windData.optInt("speed_kts", 0); // Default to 0 if not available
+        int gustKts = windData.optInt("gust_kts", 0);   // Default to 0 if not available
+
+        // Base wind string format
+        StringBuilder windString = new StringBuilder();
+
+        // Add the direction
+        windString.append(direction);
+
+        // Add the speed with gusts if present
+        if (gustKts > 0) {
+            windString.append(" at ").append(speedKts).append("-").append(gustKts).append(" kts");
+        } else {
+            windString.append(" at ").append(speedKts).append(" kts");
+        }
+
+        return windString.toString();
     }
 
 
