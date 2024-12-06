@@ -53,7 +53,14 @@ public class WeatherServiceImpl implements Weatherservice {
         handleWind(result, METARcomponents);
         handleVisibility(result, METARcomponents);
         handleClouds(result, METARcomponents);
-        handleOtherKeys(result, METARcomponents);
+        handleTempature(result,METARcomponents);
+        handleDewpoint(result, METARcomponents);
+        handleDewpoint(result, METARcomponents);
+
+        handleBarometer(result, METARcomponents);
+
+        handleHumidity(result, METARcomponents);
+
 
         return METARcomponents;
     }
@@ -81,16 +88,38 @@ public class WeatherServiceImpl implements Weatherservice {
             METARcomponents.put("clouds", cloudsList);
         }
     }
-
-    // Handle other keys in keyList
-    private void handleOtherKeys(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
-        String[] keyList = {"observed", "temperature", "dewpoint", "barometer", "humidity"};
-
-        for (String key : keyList) {
-            String value = result.optString(key, "Not Available");
-            METARcomponents.put(key, value);
+    private void handleTempature(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        if (result.has("temperature") && !result.isNull("temperature")) {
+            String temps = ParseTempature(result.getJSONObject("temperature"));
+            METARcomponents.put("temperature", temps);
         }
     }
+
+
+    // Handle dewpoint data
+    private void handleDewpoint(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        if (result.has("dewpoint") && !result.isNull("dewpoint")) {
+            String dewpointString = ParseDewpoint(result.getJSONObject("dewpoint"));
+            METARcomponents.put("dewpoint", dewpointString);
+        }
+    }
+
+    // Handle barometer data
+    private void handleBarometer(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        if (result.has("barometer") && !result.isNull("barometer")) {
+            String barometerString = ParsePressure(result.getJSONObject("barometer"));
+            METARcomponents.put("barometer", barometerString);
+        }
+    }
+
+    // Handle humidity data
+    private void handleHumidity(JSONObject result, LinkedHashMap<String, Object> METARcomponents) {
+        if (result.has("humidity") && !result.isNull("humidity")) {
+            String humidityString = ParseHumidity(result.getJSONObject("humidity"));
+            METARcomponents.put("humidity", humidityString);
+        }
+    }
+
 
 
     /**
@@ -144,6 +173,25 @@ public class WeatherServiceImpl implements Weatherservice {
     private String ParseVisibility(JSONObject VisibilityData){
 
         return VisibilityData.optString("miles") +" SM";
+    }
+
+    private String ParseTempature(JSONObject TempData){
+
+        return TempData.optString("fahrenheit") +" degrees F " + TempData.optString("celsius") + " degrees C";
+    }
+
+    private String ParseDewpoint(JSONObject DewpointData){
+
+        return DewpointData.optString("fahrenheit") +" degrees F " + DewpointData.optString("celsius") + " degrees C";
+    }
+    // Parsing functions
+
+    private String ParsePressure(JSONObject PressureData) {
+        return "hg: "+ PressureData.optString("hg");
+    }
+
+    private String ParseHumidity(JSONObject HumidityData) {
+        return HumidityData.optString("percent") + " %";
     }
 
 
