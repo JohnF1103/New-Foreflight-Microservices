@@ -11,6 +11,8 @@ public interface Weatherservice {
      HashMap<String, Object> separateMetarComponents(String info);
 
      String getFlightRules(HashMap<String, Object> WeatherComponents);
+
+     String getFlightConditions(HashMap<String, Object> WeatherComponents);
 }
 
 

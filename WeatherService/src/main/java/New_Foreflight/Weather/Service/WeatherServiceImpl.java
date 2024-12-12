@@ -30,7 +30,7 @@ public class WeatherServiceImpl implements Weatherservice {
 
         String RawMETAR = parseRawMETARText(apiResponseJSON);
         HashMap<String, Object> SeperatedComponents = separateMetarComponents(apiResponseJSON);
-        String FLightRules = getFlightRules(SeperatedComponents);
+        String FLightRules = getFlightConditions(SeperatedComponents);
 
         return new AirportWeatherResponse(
                 RawMETAR,
@@ -68,7 +68,7 @@ public class WeatherServiceImpl implements Weatherservice {
         return metarComponents;
     }
     @Override
-    public String getFlightRules(HashMap<String, Object> WeatherComponents) {
+    public String getFlightConditions(HashMap<String, Object> WeatherComponents) {
 
         /*
         * VFR conditions are defined as visibility greater than 5 statute miles and a cloud ceiling above 3,000 feet.
