@@ -9,9 +9,6 @@ public interface Weatherservice {
      AirportWeatherResponse getAirportWeather(String iaco);
      String parseRawMETARText(String apiResponse);
      HashMap<String, Object> separateMetarComponents(String info);
-
-     String getFlightRules(HashMap<String, Object> WeatherComponents);
-
      String getFlightConditions(HashMap<String, Object> WeatherComponents);
 }
 
