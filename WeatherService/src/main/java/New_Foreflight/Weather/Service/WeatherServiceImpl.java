@@ -30,7 +30,7 @@ public class WeatherServiceImpl implements Weatherservice {
         return new AirportWeatherResponse(
                 parseRawMETARText(apiResponseJSON),
                 separateMetarComponents(apiResponseJSON),
-                "vfr"
+                getFlightRules(apiResponseJSON)
         );
     }
 
@@ -61,6 +61,23 @@ public class WeatherServiceImpl implements Weatherservice {
 
         return metarComponents;
     }
+    @Override
+    public String getFlightRules(String apiResponseJSON) {
+
+        /*
+        * VFR conditions are defined as visibility greater than 5 statute miles and a cloud ceiling above 3,000 feet.
+        *
+        * MVFR conditions occur when visibility is between 3 and 5 statute miles or the cloud ceiling is between 1,000 and 3,000 feet.
+        *
+        * IFR conditions are for visibility less than or equal to 3 statute miles or a cloud ceiling at or below 1,000 feet.
+        *
+        * Complete this function to determine the flight rules for the given weather. return the result as a string E.G VFR, IFR, MVFR
+        *
+        * */
+
+        return apiResponseJSON;
+    }
+
 
     /**
      * Helper method to add a component if it exists in the JSON object.the "handle clouds handle vis etc.
