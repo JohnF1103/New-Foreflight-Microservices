@@ -7,8 +7,10 @@ import java.util.HashMap;
 public interface Weatherservice {
 
      AirportWeatherResponse getAirportWeather(String iaco);
-     String ParseRawMETARText(String info);
-     HashMap<String, Object> SeperateMetarComponents(String info);
+     String parseRawMETARText(String apiResponse);
+     HashMap<String, Object> separateMetarComponents(String info);
+
+     String getFlightRules(String apiResponseJSON);
 }
 
 
