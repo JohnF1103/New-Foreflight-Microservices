@@ -27,12 +27,18 @@ public class WeatherServiceImpl implements Weatherservice {
         RestTemplate restTemplate = new RestTemplate();
         String apiResponseJSON = restTemplate.getForObject(endpoint, String.class);
 
+
+        String RawMETAR = parseRawMETARText(apiResponseJSON);
+        HashMap<String, Object> SeperatedComponents = separateMetarComponents(apiResponseJSON);
+        String FLightRules = getFlightRules(SeperatedComponents);
+
         return new AirportWeatherResponse(
-                parseRawMETARText(apiResponseJSON),
-                separateMetarComponents(apiResponseJSON),
-                getFlightRules(apiResponseJSON)
+                RawMETAR,
+                SeperatedComponents,
+                FLightRules
         );
     }
+
 
     @Override
     public String parseRawMETARText(String apiResponse) {
@@ -62,7 +68,7 @@ public class WeatherServiceImpl implements Weatherservice {
         return metarComponents;
     }
     @Override
-    public String getFlightRules(String apiResponseJSON) {
+    public String getFlightRules(HashMap<String, Object> WeatherComponents) {
 
         /*
         * VFR conditions are defined as visibility greater than 5 statute miles and a cloud ceiling above 3,000 feet.
@@ -75,7 +81,11 @@ public class WeatherServiceImpl implements Weatherservice {
         *
         * */
 
-        return apiResponseJSON;
+        System.out.println(WeatherComponents.get("clouds"));
+        System.out.println(WeatherComponents.get("visibility"));
+
+
+        return "test";
     }
 
 
